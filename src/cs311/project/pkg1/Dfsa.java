@@ -107,14 +107,14 @@ public class Dfsa {
     }
     
     public void dump(){
-        System.out.println("\n-----\n(1) number of States: "+num_states);
-        System.out.print("(2) final States: ");
+        System.out.println("(1) number of states: "+num_states);
+        System.out.print("(2) final states: ");
         for(int i=0; i<final_states.size(); i++){
             System.out.print(final_states.get(i)+ " ");
         }
-        System.out.println("\n(3) alphabet:");
+        System.out.print("\n(3) alphabet: ");
         alphabet.forEach((k,v)->System.out.print(k+", "));
-        System.out.println("\n(4) Delta function");
-        delta.forEach((k,v)->System.out.println("Initial State + Input : " + k + " Next State : " + v));
+        System.out.println("\n(4) transitions");
+        delta.forEach((k,v)->System.out.println("(" + k + " " + v+")"));
     }
 }
