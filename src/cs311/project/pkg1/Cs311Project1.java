@@ -19,7 +19,6 @@ public class Cs311Project1 {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws FileNotFoundException {
-        // TODO code application logic here
         Scanner filein = new Scanner(new FileInputStream("input.txt"));
         int count=1;
         while(filein.hasNext()){
@@ -33,10 +32,15 @@ public class Cs311Project1 {
             //Set delta function values
             while(filein.hasNext()){
                 String next = filein.nextLine();
+                if(next.length()==0){
+                    dfsa.dump();
+                    System.out.printf("%50s %10s\n","ε",dfsa.evalString(next));
+                    break;
+                }
                 if(next.charAt(0)=='(') dfsa.deltaPush(next);
                 else{
                     dfsa.dump();
-                    System.out.println(next +" "+ dfsa.evalString(next));
+                    System.out.printf("%50s %10s\n",next,dfsa.evalString(next));
                     break;
                 }
             }
@@ -44,7 +48,7 @@ public class Cs311Project1 {
             while(filein.hasNext()){
                 String next = filein.nextLine();
                 if(next.equals("////")) break;
-                System.out.println(next +" "+ dfsa.evalString(next));
+                System.out.printf("%50s %10s\n",next,dfsa.evalString(next));
             }
         
         }

@@ -30,9 +30,9 @@ public class Dfsa {
     }
     
     public void setFinalStates(String final_states){
-        final_states = final_states.replaceAll(" ", "");
-        for(int i=0; i<final_states.length(); i++){
-            this.final_states.add( Character.getNumericValue(final_states.charAt(i)) );
+        String [] stringArr = final_states.split(" ");
+        for(int i=0; i<stringArr.length; i++){
+            this.final_states.add( Integer.parseInt(stringArr[i]) );
         }
     }
     
@@ -51,7 +51,10 @@ public class Dfsa {
     //Input letter from alphabet
     //Return numerical representation of that letter
     public int getLetterValue(char letter){
+        if(alphabet.containsKey(letter))
         return (int)this.alphabet.get(letter);
+        else System.out.println("alphabet didnt have "+letter);
+        return 0;
     }
     
     // Gives a value for delta
@@ -60,23 +63,34 @@ public class Dfsa {
     // a input
     // q next state
     public void deltaPush(String set){
-        set = set.replaceAll(" ", "");
         if(set.charAt(0)=='('){
             set =  set.substring(1);
         }
         if(set.charAt(set.length()-1)==')'){
             set = set.substring(0, set.length()-1);
         }
-        
-        String stateInput = set.substring(0,2);
-        int nextState = getLetterValue(set.charAt(2));
-        delta.put(stateInput, nextState);
+        //allow for easier state transition definitions
+        //a can be multiple symbols, setting multiple rules
+        String [] items = set.split(" ");
+        if(items[1].length()>1){
+            String state = items[0];
+            int nextState = Integer.parseInt(items[2]);
+            String inputs = items[1];
+            for(int i=0; i<inputs.length(); i++){
+                String temp = state + " "+inputs.charAt(i);
+                delta.put(temp, nextState);
+            }
+        }else{
+            String stateInput = items[0] + " " + items[1];
+            int nextState = Integer.parseInt(items[2]);
+            delta.put(stateInput, nextState);
+        }
     }
     
     public String evalString(String input){
         currentState=0;
         for(int i=0; i<input.length(); i++){
-            String stateInput = Integer.toString(currentState)+ input.charAt(i);
+            String stateInput = Integer.toString(currentState)+" "+ input.charAt(i);
             if(delta.containsKey(stateInput)){
                 currentState = (int)delta.get(stateInput);
             }else{
